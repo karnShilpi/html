@@ -1,3 +1,55 @@
+<?php 
+session_start();
+$_REQUEST['task']='';
+require_once('../../config.php');
+if($_SESSION['userdata']==''){
+	header('Location: ../../login.php');
+	exit();
+}
+
+$sql = "SELECT * FROM customer";
+$result = $mysqli -> query($sql);
+$records=$result -> fetch_all(MYSQLI_ASSOC);
+
+/*Insert*/
+if(isset($_POST['submit'])){
+	
+	$name= $mysqli -> real_escape_string($_POST['name']);
+	$phone= $mysqli -> real_escape_string($_POST['phone']);
+	$homeAddress= $mysqli -> real_escape_string($_POST['homeAddress']);
+	$mysqli -> query("INSERT INTO customer (c_name, phone, homeAddress)
+             VALUES ('$name', '$phone' , '$homeAddress')");
+           $c_id=$mysqli -> insert_id;
+
+				if ($c_id) {
+				for($i=1;$i<=12;$i++){
+					$amount= $_POST['amount_' . $i . '']?$mysqli -> real_escape_string($_POST['amount_' . $i . '']):'';
+					$payment_mode= $_POST['payment_mode_' . $i . '']?$mysqli -> real_escape_string($_POST['payment_mode_' . $i . '']):'';
+					$date= $mysqli -> real_escape_string($_POST['date_' . $i . ''])?$mysqli -> real_escape_string($_POST['date_' . $i . '']):'';
+					
+					
+					$mysqli -> query("INSERT INTO payment_detail (customer_id, month, amount,date,payment_mode)
+             VALUES ('$c_id', '$i', '$amount','$payment_mode','$date')");
+          
+				}
+				header("Refresh:0");
+				} else {
+				echo "Error: ";
+				}
+}
+
+if($_REQUEST['task']=='edit' && $_REQUEST['id']!=''){
+	
+	$id=base64_decode($_REQUEST['id']);
+	$sql = "SELECT t1.c_name,t1.phone,t1.homeAddress,t2.month,t2.amount,t2.date,t2.payment_mode FROM customer as t1 INNER JOIN payment_detail as t2 ON t1.id = t2.customer_id where t1.id='$id'";
+	$result = $mysqli -> query($sql);
+	$records_edit=$result -> fetch_all(MYSQLI_ASSOC);
+	
+}
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -9,6 +61,7 @@
 <link rel="stylesheet" href="./style.css">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -107,129 +160,37 @@
 					</button>
 				</div>
 				<div class="tiles">
+					<?php foreach($records as $row){ ?>
 					<article class="tile">
 						<div class="tile-header">
-							<i class="ph-lightning-light"></i>
+							<i class="far fa-user-circle"  style='font-size:36px'></i>
 							<h3>
-								<span>Customer1</span>
-								<span>Address</span>
+								<span><?php echo $row['c_name']?$row['c_name']:''; ?></span>
+								<span><?php echo $row['homeAddress']?$row['homeAddress']:''; ?></span>
 							</h3>
 						</div>
-						<a href="#">
-							<span>Amount</span>
-							<span class="icon-button">
+						
+							<span>Amount: <?php echo $row['amount']?$row['amount']:''; ?></span>
+							
+							<span class="icon-button" data-id="<?php echo $row['id']; ?>" onclick="showeditModal(event)">
 								<i class="ph-caret-right-bold"></i>
 							</span>
-						</a>
+						
 					</article>
-					
+					<?php } ?>
 					
 				</div>
 				
 			</section>
 			
 		</div>
-		<!--<div class="app-body-sidebar">
-			<section class="payment-section">
-				<h2>New Payment</h2>
-				<div class="payment-section-header">
-					<p>Choose a card to transfer money</p>
-					<div>
-						<button class="card-button mastercard">
-							<svg width="2001" height="1237" viewBox="0 0 2001 1237" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<g id="a624784f2834e21c94a1c0c9a58bbbaa">
-									<path id="7869b07bea546aa59a5ee138adbcfd5a" d="M1270.57 1104.15H729.71V132.15H1270.58L1270.57 1104.15Z" fill="currentColor"></path>
-									<path id="b54e3ab4d7044a9f288082bc6b864ae6" d="M764 618.17C764 421 856.32 245.36 1000.08 132.17C891.261 46.3647 756.669 -0.204758 618.09 9.6031e-07C276.72 9.6031e-07 0 276.76 0 618.17C0 959.58 276.72 1236.34 618.09 1236.34C756.672 1236.55 891.268 1189.98 1000.09 1104.17C856.34 991 764 815.35 764 618.17Z" fill="currentColor"></path>
-									<path id="67f94b4d1b83252a6619ed6e0cc0a3a1" d="M2000.25 618.17C2000.25 959.58 1723.53 1236.34 1382.16 1236.34C1243.56 1236.54 1108.95 1189.97 1000.11 1104.17C1143.91 990.98 1236.23 815.35 1236.23 618.17C1236.23 420.99 1143.91 245.36 1000.11 132.17C1108.95 46.3673 1243.56 -0.201169 1382.15 -2.24915e-05C1723.52 -2.24915e-05 2000.24 276.76 2000.24 618.17" fill="currentColor"></path>
-								</g>
-							</svg>
-						</button>
-						<button class="card-button visa active">
-							<svg xmlns="http://www.w3.org/2000/svg" width="2500" height="2500" viewBox="0 0 141.732 141.732">
-								<g fill="currentColor">
-									<path d="M62.935 89.571h-9.733l6.083-37.384h9.734zM45.014 52.187L35.735 77.9l-1.098-5.537.001.002-3.275-16.812s-.396-3.366-4.617-3.366h-15.34l-.18.633s4.691.976 10.181 4.273l8.456 32.479h10.141l15.485-37.385H45.014zM121.569 89.571h8.937l-7.792-37.385h-7.824c-3.613 0-4.493 2.786-4.493 2.786L95.881 89.571h10.146l2.029-5.553h12.373l1.14 5.553zm-10.71-13.224l5.114-13.99 2.877 13.99h-7.991zM96.642 61.177l1.389-8.028s-4.286-1.63-8.754-1.63c-4.83 0-16.3 2.111-16.3 12.376 0 9.658 13.462 9.778 13.462 14.851s-12.075 4.164-16.06.965l-1.447 8.394s4.346 2.111 10.986 2.111c6.642 0 16.662-3.439 16.662-12.799 0-9.72-13.583-10.625-13.583-14.851.001-4.227 9.48-3.684 13.645-1.389z" />
-								</g>
-								<path d="M34.638 72.364l-3.275-16.812s-.396-3.366-4.617-3.366h-15.34l-.18.633s7.373 1.528 14.445 7.253c6.762 5.472 8.967 12.292 8.967 12.292z" fill="currentColor" />
-								<path fill="none" d="M0 0h141.732v141.732H0z" />
-							</svg>
-						</button>
-					</div>
-				</div>
-				<div class="payments">
-					<div class="payment">
-						<div class="card green">
-							<span>01/22</span>
-							<span>
-								•••• 4012
-							</span>
-						</div>
-						<div class="payment-details">
-							<h3>Internet</h3>
-							<div>
-								<span>$ 2,110</span>
-								<button class="icon-button">
-									<i class="ph-caret-right-bold"></i>
-								</button>
-							</div>
-						</div>
-					</div>
-					<div class="payment">
-						<div class="card olive">
-							<span>12/23</span>
-							<span>
-								•••• 2228
-							</span>
-						</div>
-						<div class="payment-details">
-							<h3>Universal</h3>
-							<div>
-								<span>$ 5,621</span>
-								<button class="icon-button">
-									<i class="ph-caret-right-bold"></i>
-								</button>
-							</div>
-						</div>
-					</div>
-					<div class="payment">
-						<div class="card gray">
-							<span>03/22</span>
-							<span>
-								•••• 5214
-							</span>
-						</div>
-						<div class="payment-details">
-							<h3>Gold</h3>
-							<div>
-								<span>$ 3,473</span>
-								<button class="icon-button">
-									<i class="ph-caret-right-bold"></i>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="faq">
-					<p>Most frequently asked questions</p>
-					<div>
-						<label>Question</label>
-						<input type="text" placeholder="Type here">
-					</div>
-				</div>
-				<div class="payment-section-footer">
-					<button class="save-button">
-						Save
-					</button>
-					<button class="settings-button">
-						<i class="ph-gear"></i>
-						<span>More settings</span>
-					</button>
-				</div>
-			</section>
-		</div>-->
+		
 	</div>
 </div>
 
-<!-- Modal -->
+
+<div id="edit_model_div"></div>
+<!-- Modal Add-->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-fullscreen " role="document">
     <div class="modal-content">
@@ -240,19 +201,19 @@
         </button>
       </div>
       <div class="modal-body">
-	  <form>
+	  <form action="customer.php" method="post">
   
 	 <div class="input-group mb-2">
   <div class="input-group-prepend">
     <span class="input-group-text">Name</span>
   </div>
-  <input type="text" class="form-control" id="name" aria-describedby="emailHelp" >
+  <input type="text" class="form-control" name="name" id="name" aria-describedby="emailHelp" >
    </div>
    <div class="input-group mb-2">
   <div class="input-group-prepend">
     <span class="input-group-text">Mobile</span>
   </div>
-  <input type="text" class="form-control" id="mobile" aria-describedby="emailHelp" >
+  <input type="text" class="form-control" name="phone" id="mobile" aria-describedby="emailHelp" >
    </div>
    
   
@@ -260,7 +221,7 @@
   <div class="input-group-prepend">
     <span class="input-group-text">Address</span>
   </div>
-  <textarea class="form-control" aria-label="With textarea"></textarea>
+  <textarea class="form-control" name="homeAddress" aria-label="With textarea"></textarea>
 </div>
 
 <table class="table">
@@ -291,21 +252,18 @@
 
 		<tr>
       <th scope="row"><?php echo $month_array[$i]; ?></th>
-      <td><input type="number" class="form-control" id="name" aria-describedby="emailHelp" >
- </td>
-      <td><input type="text" class="form-control" id="name" aria-describedby="emailHelp" >
- </td>
+      <td><input type="hidden" name="month_<?php echo $i+1;?>" value="<?php echo ($i+1);?>">
+	     <input type="number" class="form-control" name="amount_<?php echo $i+1;?>" id="amount" aria-describedby="emailHelp" >
+     </td>
+      <td><input type="text" class="form-control" name="payment_mode_<?php echo $i+1;?>" aria-describedby="emailHelp" >
+      </td>
       <td><div class="form-group">
             <div class='input-group date' id='datetimepicker1'>
-			<input type='text' class="form-control" id='datetimepicker4' />
+			<input type='text' name="date_<?php echo $i+1;?>" class="form-control" id='datetimepicker4' />
                <span class="input-group-addon">
                <span class="glyphicon glyphicon-calendar"></span>
                </span>
-			   <script type="text/javascript">
-         $(function () {
-             $('#datetimepicker4').datetimepicker();
-         });
-      </script>
+			  
             </div>
          </div></td>
     </tr>
@@ -321,7 +279,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save </button>
+        <button type="submit"  name="submit" class="btn btn-primary" >Save </button>
       </div>
 	  </form>
     </div>
@@ -338,6 +296,118 @@
 });
 function showModal() {
       $('#exampleModalCenter').modal('show');
+  }
+function showeditModal(e) {
+	e.preventDefault();
+	var id=$(e.currentTarget).attr('data-id');
+	$.ajax({
+        url: "edit.php",
+        type: "post",
+        data:{task:'edit',id:id} ,
+        success: function (response) {
+        var c_data=JSON.parse(response);
+        var model_edit=`<div class="modal fade" id="editModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+	  <h5 class="modal-title text-dark mb-3">Edit Customer</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+	  <form action="customer.php" method="post">
+  
+	 <div class="input-group mb-2">
+  <div class="input-group-prepend">
+    <span class="input-group-text">Name</span>
+  </div>
+  <input type="text" class="form-control" name="name" id="name" aria-describedby="emailHelp" value="${c_data[0].c_name?c_data[0].c_name:''}" >
+   </div>
+   <div class="input-group mb-2">
+  <div class="input-group-prepend">
+    <span class="input-group-text">Mobile</span>
+  </div>
+  <input type="text" class="form-control" name="phone" id="mobile" aria-describedby="emailHelp" value="${c_data[0].phone?c_data[0].phone:''}" >
+   </div>
+   
+  
+  <div class="input-group mb-2">
+  <div class="input-group-prepend">
+    <span class="input-group-text">Address</span>
+  </div>
+  <textarea class="form-control" name="homeAddress" aria-label="With textarea">${c_data[0].homeAddress?c_data[0].homeAddress:''}</textarea>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Month</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Payment type</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <?php $month_array=array(
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July ',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+); ?>
+  <tbody>
+	<?php for($i = 0; $i < count($month_array); $i++){ ?>
+
+		<tr>
+      <th scope="row"><?php echo $month_array[$i]; ?></th>
+      <td><input type="hidden" name="month_<?php echo $i+1;?>" value="<?php echo ($i+1);?>">
+	     <input type="number" class="form-control" name="amount_<?php echo $i+1;?>" id="amount" aria-describedby="emailHelp" value="${c_data[<?php echo $i; ?>].amount?c_data[<?php echo $i; ?>].amount:''}">
+     </td>
+      <td><input type="text" class="form-control" name="payment_mode_<?php echo $i+1;?>" aria-describedby="emailHelp" value="${c_data[<?php echo $i; ?>].payment_mode?c_data[<?php echo $i; ?>].payment_mode:''}" >
+      </td>
+      <td><div class="form-group">
+            <div class='input-group date' id='datetimepicker1'>
+			<input type='text' name="date_<?php echo $i+1;?>" class="form-control" id='datetimepicker4' value="${c_data[<?php echo $i; ?>].date?c_data[<?php echo $i; ?>].date:''}"/>
+               <span class="input-group-addon">
+               <span class="glyphicon glyphicon-calendar"></span>
+               </span>
+			   
+            </div>
+         </div></td>
+    </tr>
+
+<?php } ?>
+    
+   
+  </tbody>
+</table>
+
+  
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit"  name="submit" class="btn btn-primary" >Save </button>
+      </div>
+	  </form>
+    </div>
+  </div>
+</div>`;
+$('#edit_model_div').html(model_edit)
+$('#editModalCenter').modal('show');
+  },
+        error: function(jqXHR, textStatus, errorThrown) {
+           console.log(textStatus, errorThrown);
+        }
+    });
+	
   }
     </script>
 </html>

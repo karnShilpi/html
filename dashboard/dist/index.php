@@ -1,3 +1,10 @@
+<?php
+session_start();
+if($_SESSION['userdata']==''){
+	header('Location: login.php');
+	exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -74,7 +81,7 @@
 					<i class="ph-browsers"></i>
 					<span>Dashboard</span>
 				</a>
-				<a href="customer.phps">
+				<a href="customer.php">
 					<i class="ph-check-square"></i>
 					<span>Customer</span>
 				</a>

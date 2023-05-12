@@ -3,31 +3,26 @@ require_once('config.php');
 if(isset($_POST['submit'])){
  $email= $mysqli -> real_escape_string($_POST['email']);
  $password= $mysqli -> real_escape_string($_POST['password']);
- $sql = "SELECT * FROM users WHERE email='$email' and password='$password'";
- $stmt = $mysqli -> query($sql);
- if($stmt)
+ $sql = "SELECT * FROM owner WHERE email='$email' and password='$password'";
+ $result = $mysqli -> query($sql);
+ $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+ 
+ if($row)
          {
-            $_SESSION['log'] = $uname;
+          session_start();
+            $_SESSION['userdata'] = $row; 
+            
+            
             header('Location: dashboard/dist/index.php');
             exit();
          }
          else
          {
             echo "Something went wrong!<BR>";
-            echo "Error Description: ", $conn -> error;
+            echo "Error Description: ", $mysqli -> error;
       }
  
- if($stmt)
- {
-    $_SESSION['log'] = $uname;
-    header('Location: welcome.php');
-    exit();
- }
- else
- {
-    echo "Something went wrong!<BR>";
-    echo "Error Description: ", $conn -> error;
-}
+ 
 
 }else{
   echo 'd';
