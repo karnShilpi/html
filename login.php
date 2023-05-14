@@ -1,9 +1,9 @@
 <?php
 require_once('config.php');
 if(isset($_POST['submit'])){
- $email= $mysqli -> real_escape_string($_POST['email']);
+ $phone= $mysqli -> real_escape_string($_POST['phone']);
  $password= $mysqli -> real_escape_string($_POST['password']);
- $sql = "SELECT * FROM owner WHERE email='$email' and password='$password'";
+ $sql = "SELECT * FROM owner WHERE phone='$phone' and password='$password'";
  $result = $mysqli -> query($sql);
  $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
  
@@ -24,8 +24,6 @@ if(isset($_POST['submit'])){
  
  
 
-}else{
-  echo 'd';
 }
 ?>
 <!DOCTYPE html>
@@ -62,13 +60,15 @@ if(isset($_POST['submit'])){
    
          <div class="container-fluid">
          <div class="row">
+          <div class="col-sm-12">
+          <div class="row " style="margin-top:10%">
          <div class="col-sm-3"></div>
          <div class="col-sm-6">
    <form action="login.php" method="post">
   <!-- Email input -->
   <div class="form-outline mb-4">
-    <input type="email" id="email" name="email" class="form-control" />
-    <label class="form-label" for="form2Example1">Email address</label>
+    <input type="number" id="phone" name="phone" class="form-control" maxlength="10" />
+    <label class="form-label" for="form2Example1">Mobile Number</label>
   </div>
 
   <!-- Password input -->
@@ -118,7 +118,9 @@ if(isset($_POST['submit'])){
   </div>
 </form>
 </div>
-<div class="col-sm-3"></div>  
+<div class="col-sm-3"></div> 
+</div> 
+</div>
 </div>
 </div>
     <!-- Javascript files-->

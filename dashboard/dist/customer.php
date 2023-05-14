@@ -73,14 +73,14 @@ if($_REQUEST['task']=='edit' && $_REQUEST['id']!=''){
 					<img src="https://assets.codepen.io/285131/almeria-logo.svg" />
 				</span>
 				<h1 class="logo-title">
-					<span>Almeria</span>
-					<span>NeoBank</span>
+					<span>ABC</span>
+					<span>Jwellers</span>
 				</h1>
 			</div>
 		</div>
 		<div class="app-header-navigation">
 			<div class="tabs">
-				<a href="#">
+				<!--<a href="#">
 					Overview
 				</a>
 				<a href="#" class="active">
@@ -97,14 +97,14 @@ if($_REQUEST['task']=='edit' && $_REQUEST['id']!=''){
 				</a>
 				<a href="#">
 					Business
-				</a>
+				</a>-->
 			</div>
-		</div>
+</div>
 		<div class="app-header-actions">
 			<button class="user-profile">
-				<span>Matheo Peterson</span>
+				<span><?php print_r(!empty($_SESSION['userdata']['name'])?$_SESSION['userdata']['name']:'') ; ?></span>
 				<span>
-					<img src="https://assets.codepen.io/285131/almeria-avatar.jpeg" />
+				<i class="fa fa-user" aria-hidden="true"></i>
 				</span>
 			</button>
 			<div class="app-header-actions-buttons">

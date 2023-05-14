@@ -10,8 +10,13 @@ if($_SESSION['userdata']==''){
 <head>
   <meta charset="UTF-8">
   <title>CodePen - Dark UI - Bank dashboard concept</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
 <link rel="stylesheet" href="./style.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
 </head>
 <body>
@@ -24,38 +29,21 @@ if($_SESSION['userdata']==''){
 					<img src="https://assets.codepen.io/285131/almeria-logo.svg" />
 				</span>
 				<h1 class="logo-title">
-					<span>Almeria</span>
-					<span>NeoBank</span>
+					<span>ABC</span>
+					<span>Jwellers</span>
 				</h1>
 			</div>
 		</div>
 		<div class="app-header-navigation">
-			<div class="tabs">
-				<a href="#">
-					Overview
-				</a>
-				<a href="#" class="active">
-					Payments
-				</a>
-				<a href="#">
-					Cards
-				</a>
-				<a href="#">
-					Account
-				</a>
-				<a href="#">
-					System
-				</a>
-				<a href="#">
-					Business
-				</a>
-			</div>
+			
+				<h3>Dashboard</h3>
+			
 		</div>
 		<div class="app-header-actions">
-			<button class="user-profile">
-				<span>Matheo Peterson</span>
+		<button class="user-profile">
+				<span><?php print_r(!empty($_SESSION['userdata']['name'])?$_SESSION['userdata']['name']:'') ; ?></span>
 				<span>
-					<img src="https://assets.codepen.io/285131/almeria-avatar.jpeg" />
+				<i class="fa fa-user" aria-hidden="true"></i>
 				</span>
 			</button>
 			<div class="app-header-actions-buttons">
@@ -85,35 +73,20 @@ if($_SESSION['userdata']==''){
 					<i class="ph-check-square"></i>
 					<span>Customer</span>
 				</a>
-				<a href="#">
-					<i class="ph-swap"></i>
-					<span>Transfers</span>
-				</a>
-				<a href="#">
-					<i class="ph-file-text"></i>
-					<span>Templates</span>
-				</a>
-				<a href="#">
-					<i class="ph-globe"></i>
-					<span>SWIFT</span>
-				</a>
-				<a href="#">
-					<i class="ph-clipboard-text"></i>
-					<span>Exchange</span>
-				</a>
+				
 			</nav>
-			<footer class="footer">
+			<!--<footer class="footer">
 				<h1>Almeria<small>©</small></h1>
 				<div>
 					Almeria ©<br />
 					All Rights Reserved 2021
 				</div>
-			</footer>
+			</footer>-->
 		</div>
 		<div class="app-body-main-content">
 			<section class="service-section">
 				<h2>Service</h2>
-				<div class="service-section-header">
+				<!--<div class="service-section-header">
 					<div class="search-field">
 						<i class="ph-magnifying-glass"></i>
 						<input type="text" placeholder="Account number">
@@ -133,59 +106,43 @@ if($_SESSION['userdata']==''){
 					<button class="flat-button">
 						Toggle search
 					</button>
-				</div>
+				</div>-->
 				<div class="tiles">
 					<article class="tile">
 						<div class="tile-header">
-							<i class="ph-lightning-light"></i>
+						<span style='font-size:100px;'>&#8377;</span>
 							<h3>
-								<span>Electricity</span>
-								<span>UrkEnergo LTD.</span>
+								<span>1000000</span>
+								<span>Total Amount</span>
 							</h3>
 						</div>
-						<a href="#">
-							<span>Go to service</span>
-							<span class="icon-button">
+						
+							<span>Go to Report</span>
+							<span class="icon-button" onclick="showReportModal(event)">
 								<i class="ph-caret-right-bold"></i>
 							</span>
-						</a>
+						
 					</article>
 					<article class="tile">
 						<div class="tile-header">
-							<i class="ph-fire-simple-light"></i>
+						<i class='fas fa-users' style='font-size:100px;padding-top:18px'></i>
 							<h3>
-								<span>Heating Gas</span>
-								<span>Gazprom UA</span>
+								<span>200</span>
+								<span>Total Customer</span>
 							</h3>
 						</div>
-						<a href="#">
-							<span>Go to service</span>
-							<span class="icon-button">
+						
+							<span>Go to report</span>
+							<span class="icon-button" onclick="showReportModal(event)">
 								<i class="ph-caret-right-bold"></i>
 							</span>
-						</a>
+						
 					</article>
-					<article class="tile">
-						<div class="tile-header">
-							<i class="ph-file-light"></i>
-							<h3>
-								<span>Tax online</span>
-								<span>Kharkov 62 str.</span>
-							</h3>
-						</div>
-						<a href="#">
-							<span>Go to service</span>
-							<span class="icon-button">
-								<i class="ph-caret-right-bold"></i>
-							</span>
-						</a>
-					</article>
+					
 				</div>
-				<div class="service-section-footer">
-					<p>Services are paid according to the current state of the currency and tariff.</p>
-				</div>
+
 			</section>
-			<section class="transfer-section">
+			<!--<section class="transfer-section">
 				<div class="transfer-section-header">
 					<h2>Latest transfers</h2>
 					<div class="filter-options">
@@ -266,9 +223,9 @@ if($_SESSION['userdata']==''){
 						</div>
 					</div>
 				</div>
-			</section>
+			</section>-->
 		</div>
-		<div class="app-body-sidebar">
+		<!--<div class="app-body-sidebar">
 			<section class="payment-section">
 				<h2>New Payment</h2>
 				<div class="payment-section-header">
@@ -364,11 +321,170 @@ if($_SESSION['userdata']==''){
 					</button>
 				</div>
 			</section>
-		</div>
+		</div>-->
 	</div>
 </div>
-<!-- partial -->
-  <script src='https://unpkg.com/phosphor-icons'></script><script  src="./script.js"></script>
 
+
+<div id="report_model_div"></div>
+<!-- partial -->
+<script src='https://unpkg.com/phosphor-icons'></script><script  src="./script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+ 
 </body>
+<script>
+	function showReportModal(event){
+
+		event.preventDefault();
+		$.ajax({
+        url: "edit.php",
+        type: "post",
+        data:{task:'GR'} ,
+        success: function (response) {
+        var c_data=JSON.parse(response);
+        var model_edit=`<div class="modal fade" id="reportModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+	  <h5 class="modal-title text-dark mb-3">Report </h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="printtable">
+	  
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr class="fs-5">
+      <th scope="col">Slno</th>
+      <th scope="col">Name</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Address</th>
+      <th scope="col">Total</th>
+      <th scope="col">January</th>
+      <th scope="col">February</th>
+      <th scope="col">March</th>
+      <th scope="col">April</th>
+      <th scope="col">May</th>
+      <th scope="col">June</th>
+      <th scope="col">July</th>
+      <th scope="col">August</th>
+      <th scope="col">September</th>
+      <th scope="col">October</th>
+      <th scope="col">November</th>
+      <th scope="col">December</th>
+    </tr>
+  </thead>
+  
+  <tbody>`;
+	
+	
+for(var i=0;i<c_data['r1'].length;i++){
+   model_edit+=`<tr>`;
+   model_edit+=`<th scope="row">${(i+1)}</th>`;
+   
+		
+		
+	model_edit+=`<th scope="row">${c_data['r1'][i].c_name}</th>`;
+	model_edit+=`<th scope="row">${c_data['r1'][i].phone}</th>`;
+	model_edit+=`<th scope="row">${c_data['r1'][i].homeAddress}</th>`;
+	
+	model_edit+=`<th scope="row">total</th>`;
+  
+	for(var k=0;k<c_data['r2'].length;k++){
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='1')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='2')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='3')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='4')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='5')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='6')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='7')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='8')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='9')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='10')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='11')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	if(c_data['r1'][i].id==c_data['r2'][k].id && c_data['r2'][k].month=='12')
+	{
+	model_edit+=`<th scope="row">${c_data['r2'][k].amount}</th>`;
+    }
+	
+
+	
+   }
+   model_edit+=`</tr>`;
+}
+
+
+    
+   
+	model_edit+=`</tbody>
+</table>
+
+  
+
+      
+      <div class="modal-footer">
+        <button type="submit"  name="submit" class="btn btn-primary" onclick="printDiv()" >Print </button>
+      </div>
+	 
+    </div>
+  </div>
+</div>`;
+$('#report_model_div').html(model_edit)
+$('#reportModalCenter').modal('show');
+  },
+        error: function(jqXHR, textStatus, errorThrown) {
+           console.log(textStatus, errorThrown);
+        }
+    });
+	
+	}
+
+	function printDiv() {
+                    var divName= "printtable";
+
+                     var printContents = document.getElementById(divName).innerHTML;
+                     var originalContents = document.body.innerHTML;
+
+                     document.body.innerHTML = printContents;
+
+                     window.print();
+
+                     document.body.innerHTML = originalContents;
+                }
+</script>
 </html>
