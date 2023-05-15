@@ -64,17 +64,7 @@ if($_SESSION['userdata']==''){
 	</header>
 	<div class="app-body">
 		<div class="app-body-navigation">
-			<nav class="navigation">
-				<a href="#">
-					<i class="ph-browsers"></i>
-					<span>Dashboard</span>
-				</a>
-				<a href="customer.php">
-					<i class="ph-check-square"></i>
-					<span>Customer</span>
-				</a>
-				
-			</nav>
+			     <?php include 'sidebar.php'; ?>
 			<!--<footer class="footer">
 				<h1>Almeria<small>©</small></h1>
 				<div>

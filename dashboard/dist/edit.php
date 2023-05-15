@@ -19,4 +19,27 @@ if($_REQUEST['task']=='GR'){
 	$final_array=array('r1'=>$records_1, 'r2'=>$records_2);
 	print_r( json_encode($final_array));
 }
+
+/*if($_REQUEST['update']=='update'){
+	$name= $mysqli -> real_escape_string($_POST['name']);
+	$phone= $mysqli -> real_escape_string($_POST['phone']);
+	$homeAddress= $mysqli -> real_escape_string($_POST['homeAddress']);
+	              $mysqli -> query("INSERT INTO customer (c_name, phone, homeAddress)
+                                 VALUES ('$name', '$phone' , '$homeAddress')");
+  $c_id=$mysqli -> insert_id;
+
+				if ($c_id) {
+				for($i=1;$i<=12;$i++){
+					$amount= $_POST['amount_' . $i . '']?$mysqli -> real_escape_string($_POST['amount_' . $i . '']):'';
+					$payment_mode= $_POST['payment_mode_' . $i . '']?$mysqli -> real_escape_string($_POST['payment_mode_' . $i . '']):'';
+					$date= $mysqli -> real_escape_string($_POST['date_' . $i . ''])?$mysqli -> real_escape_string($_POST['date_' . $i . '']):'';
+					
+					
+					$mysqli -> query("INSERT INTO payment_detail (customer_id, month, amount,date,payment_mode)
+             VALUES ('$c_id', '$i', '$amount','$payment_mode','$date')");
+          
+				}
+
+			}
+}*/
 ?>
